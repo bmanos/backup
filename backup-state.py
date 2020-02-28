@@ -1,8 +1,9 @@
 # Get Veeam backup email state
 # and insert result to database
-# Author: Bairaktaris Emmanuel
-# Date  : December 4, 2019
-# Link  : http://repairmypc.net
+# Author       : Bairaktaris Emmanuel
+# Date         : December 4, 2019
+# Modified     : February 28, 2020
+# Link         : http://repairmypc.net
 
 # Import libraries
 from imapclient import IMAPClient
@@ -52,9 +53,12 @@ for msgid, data in server.fetch(messages, ['ENVELOPE']).items():
      envelope = data[b'ENVELOPE']
      print('ID #%d: "%s" received %s' % (msgid, envelope.subject.decode(), envelope.date))
 
+# Get message subject
+endorsubj = envelope.subject.decode()
+
 # Insert results into database by creating sql query file
 
-if ((envelope.subject.decode()) == '[Success] endor - daily (1 machines) '):
+if '[Success]' in endorsubj:
     f = open('C:/tools/backup/data/' + str(datetime.date.today()) + '_backup_state_endor_' + str(uuid.uuid1()) + '.sql', 'w') # the file name contains the current date of execution and unique id number(uuid)
     f.write('Insert into papback (Day, Result, Reason) VALUES (' + '\'' + str(mydate) + '\'' + ' ,' + '\'' + 'True' + '\'' + ' ,' + '\'' + envelope.subject.decode() +'\'' ')')
     f.close()
@@ -62,7 +66,7 @@ if ((envelope.subject.decode()) == '[Success] endor - daily (1 machines) '):
     f.write('Insert into papback (Day, Result, Reason) VALUES (' + '\'' + str(mydate) + '\'' + ' ,' + '\'' + 'True' + '\'' + ' ,' + '\'' + envelope.subject.decode() +'\'' ')')
     f.close()
     print("Success")
-elif ((envelope.subject.decode()) == '[Warning] endor - daily (1 machines) '):
+elif '[Warning]' in endorsubj:
     f = open('C:/tools/backup/data/' + str(datetime.date.today()) + '_backup_state_endor_' + str(uuid.uuid1()) + '.sql', 'w') # the file name contains the current date of execution and unique id number(uuid)
     f.write('Insert into papback (Day, Result, Reason) VALUES (' + '\'' + str(mydate) + '\'' + ' ,' + '\'' + 'True' + '\'' + ' ,' + '\'' + envelope.subject.decode() +'\'' ')')
     f.close()
@@ -70,7 +74,7 @@ elif ((envelope.subject.decode()) == '[Warning] endor - daily (1 machines) '):
     f.write('Insert into papback (Day, Result, Reason) VALUES (' + '\'' + str(mydate) + '\'' + ' ,' + '\'' + 'True' + '\'' + ' ,' + '\'' + envelope.subject.decode() +'\'' ')')
     f.close()
     print("Warning")
-elif ((envelope.subject.decode()) == '[Failed] endor - daily (1 machines) '):
+elif '[Failed]' in endorsubj:
     f = open('C:/tools/backup/data/ERROR-export_backup_state_endor.sql', 'a')
     f.write(str(datetime.datetime.now()) + '\n')
     f.write("Backup error" + '\n')
@@ -108,9 +112,12 @@ for msgid, data in server.fetch(messages, ['ENVELOPE']).items():
      envelope = data[b'ENVELOPE']
      print('ID #%d: "%s" received %s' % (msgid, envelope.subject.decode(), envelope.date))
 
+# Get message subject
+naboosubj = envelope.subject.decode()
+
 # Insert results into database by creating sql query file
 
-if ((envelope.subject.decode()) == '[Success] naboo - daily (1 machines) '):
+if '[Success]' in naboosubj:
     f = open('C:/tools/backup/data/' + str(datetime.date.today()) + '_backup_state_naboo_' + str(uuid.uuid1()) + '.sql', 'w') # the file name contains the current date of execution and unique id number(uuid)
     f.write('Insert into papback (Day, Result, Reason) VALUES (' + '\'' + str(mydate) + '\'' + ' ,' + '\'' + 'True' + '\'' + ' ,' + '\'' + envelope.subject.decode() +'\'' ')')
     f.close()
@@ -118,7 +125,7 @@ if ((envelope.subject.decode()) == '[Success] naboo - daily (1 machines) '):
     f.write('Insert into papback (Day, Result, Reason) VALUES (' + '\'' + str(mydate) + '\'' + ' ,' + '\'' + 'True' + '\'' + ' ,' + '\'' + envelope.subject.decode() +'\'' ')')
     f.close()
     print("Success")
-elif ((envelope.subject.decode()) == '[Warning] naboo - daily (1 machines) '):
+elif '[Warning]' in naboosubj:
     f = open('C:/tools/backup/data/' + str(datetime.date.today()) + '_backup_state_naboo_' + str(uuid.uuid1()) + '.sql', 'w') # the file name contains the current date of execution and unique id number(uuid)
     f.write('Insert into papback (Day, Result, Reason) VALUES (' + '\'' + str(mydate) + '\'' + ' ,' + '\'' + 'True' + '\'' + ' ,' + '\'' + envelope.subject.decode() +'\'' ')')
     f.close()
@@ -126,7 +133,7 @@ elif ((envelope.subject.decode()) == '[Warning] naboo - daily (1 machines) '):
     f.write('Insert into papback (Day, Result, Reason) VALUES (' + '\'' + str(mydate) + '\'' + ' ,' + '\'' + 'True' + '\'' + ' ,' + '\'' + envelope.subject.decode() +'\'' ')')
     f.close()
     print("Warning")
-elif ((envelope.subject.decode()) == '[Failed] naboo - daily (1 machines) '):
+elif '[Failed]' in naboosubj:
     f = open('C:/tools/backup/data/ERROR-export_backup_state_naboo.sql', 'a')
     f.write(str(datetime.datetime.now()) + '\n')
     f.write("Backup error" + '\n')
